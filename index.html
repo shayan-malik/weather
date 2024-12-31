@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <label for="cityName">
+        City Name: <input type="text" id="cityName">
+    </label>
+<br>
+    <button onclick="weather()">Check Weather</button>
+
+    <div class="weather">
+        <img src="" alt="" id="weatherImg">
+        <h2 id="weather"></h2>
+        <ul>
+            <li id="location"></li>
+            <li id="temperature"></li>
+            <li id="feels"></li>
+            <li id="humidity"></li>
+        </ul>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function weather(){
+            let city = document.getElementById("cityName").value
+            axios.get(`https://api.weatherapi.com/v1/current.json?key=d347dfb1a00b4f86add45435242510&q=${city}`)
+            .then((response) => {
+                console.log(response)
+                document.getElementById("weather").innerHTML = response.data.current.condition.text;
+                document.getElementById("weatherImg").src = 'https:' + response.data.current.condition.icon;
+
+                document.getElementById("location").innerHTML = "Location: " + response.data.location.name + ", " + response.data.location.region + ", " + response.data.location.country;
+                document.getElementById("temperature").innerHTML = "Temperature: " + response.data.current.temp_c + "°C";
+                document.getElementById("feels").innerHTML = "Feels Like: " + response.data.current.feelslike_c + "°C";
+                document.getElementById("humidity").innerHTML = "Humidity: " + response.data.current.humidity;
+
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+    </script>
+</body>
+</html>
